@@ -1,0 +1,25 @@
+using terms from application "Mail"
+	on perform mail action with messages theMessages for rule theRule
+		tell application "Mail"
+			repeat with thisMessage in theMessages
+				set theSender to sender of thisMessage
+				set theSubject to subject of thisMessage
+				set theContent to content of thisMessage
+				
+				set jsonInput to "{ \"FROM\": \"" & theSender & "\", \"SUBJECT\": \"" & theSubject & "\", \"BODY\": \"" & theContent & "\" }"
+
+				display notification "Drafting input for " & theSender with title "Draft My Email"
+				
+				set newContent to do shell script "PLACEHOLDER/.get_draft.sh " & jsonInput
+				
+				set replyMessage to reply thisMessage with opening window
+				tell replyMessage
+					set content to newContent
+					set visible to false
+				end tell
+				save replyMessage
+			end repeat
+		end tell
+	end perform mail action with messages
+end using terms from
+

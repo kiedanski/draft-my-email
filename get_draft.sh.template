@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+#
+
+LOGFILE="CURRENT_DIR/log.txt"
+DATE=$(date)
+INPUT="$@"
+
+function log {
+  echo "$DATE $1" >> $LOGFILE
+}
+log "New Run"
+log "Input $INPUT"
+
+PROMPT=" I need you to act as my personal assistant.\n You will recieve information about an email I just recieved and you need to draft a reply as if you were me.\nYou will be given the email using the following format: {'FROM': , 'SUBJECT': , 'BODY': \} Only generate the body of the email. Answer to the following email: $INPUT."
+
+log "$PROMPT"
+
+OLLAMA_PATH run llama2 "$PROMPT"
+
